@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+/* Optional: define tokens with @theme (Tailwind v4) */
+@theme {
+  --color-brand: #111827;
+  --radius-card: 1rem;
+}
+
+/* Base tweaks */
+@layer base {
+  html, body, #root { height: 100%; }
+}
+
+/* Component presets */
+@layer components {
+  .container-px { 
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-px {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container-px {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+  
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  
+  .btn-primary {
+    background-color: black;
+    color: white;
+  }
+  .btn-primary:hover {
+    background-color: rgb(31, 41, 55);
+  }
+  
+  .btn-ghost {
+    background-color: transparent;
+  }
+  .btn-ghost:hover {
+    background-color: rgb(243, 244, 246);
+  }
+}
+
