@@ -97,11 +97,11 @@ function SearchPopover() {
   const popular = ['finch', 'casablanca', 'daily paper', 'tank top', 'diesel']
 
   const products = [
-    { id: 1, title: 'Finch Logo Tank Top - Black', price: '₦156,000', status: 'In stock', badge: 'green', image: '/search/p1.jpg' },
-    { id: 2, title: '234Labs Globe Logo T-shirt Black', price: '₦85,800', status: 'In stock', badge: 'green', image: '/search/p2.jpg' },
-    { id: 3, title: 'Finch 3 Set Female Bodycon Top White Black Brown', price: '₦93,600', status: 'In stock', badge: 'green', image: '/search/p3.jpg' },
-    { id: 4, title: 'Marcelo Burlon Feathers Necklace Over Tee - Black Red', price: '₦358,800', status: 'In stock', badge: 'green', image: '/search/p4.jpg' },
-    { id: 5, title: '234Labs Dreamers T-shirt Green', price: '₦70,200', status: 'Only 3 in stock', badge: 'amber', image: '/search/p5.jpg' },
+    { id: 1, title: 'Finch Logo Tank Top - Black', price: '₦156,000', status: 'In stock', badge: 'green', image: '/assets/crop.jpg'},
+    { id: 2, title: '234Labs Globe Logo T-shirt Black', price: '₦85,800', status: 'In stock', badge: 'green', image: '/assets/cas.jpg' },
+    { id: 3, title: 'Finch 3 Set Female Bodycon Top White Black Brown', price: '₦93,600', status: 'In stock', badge: 'green', image: '/assets/sing.jpg' },
+    { id: 4, title: 'Marcelo Burlon Feathers Necklace Over Tee - Black Red', price: '₦358,800', status: 'In stock', badge: 'green', image: '/assets/MCM jacket1.jpg' },
+    { id: 5, title: '234Labs Dreamers T-shirt Green', price: '₦70,200', status: 'Only 3 in stock', badge: 'amber', image: '/assets/jersey.jpg' },
   ]
 
   const badgeClass = (tone) =>
