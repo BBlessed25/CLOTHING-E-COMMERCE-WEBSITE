@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { AppProvider } from './context/AppContext.jsx'
 import Layout from './components/layout/Layout.jsx'
+import ProtectedRoute from './components/auth/ProtectedRoute.jsx'
 import HomePage from './pages/HomePage.jsx'
 import CollectionPage from './pages/CollectionPage.jsx'
 import ProductPage from './pages/ProductPage.jsx'
@@ -21,6 +22,7 @@ import PrivacyPage from './pages/PrivacyPage.jsx'
 import CookiesPage from './pages/CookiesPage.jsx'
 import ResetPasswordPage from './pages/ResetPasswordPage.jsx'
 import SneakerPage from './pages/SneakerPage.jsx'
+import AccountPage from './pages/account/AccountPage.jsx'
 
 export default function App() {
   return (
@@ -52,6 +54,13 @@ export default function App() {
 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<SignUpPage />} />
+          
+          {/* Protected Routes */}
+          <Route path="/account" element={
+            <ProtectedRoute>
+              <AccountPage />
+            </ProtectedRoute>
+          } />
         </Route>
       </Routes>
     </AppProvider>

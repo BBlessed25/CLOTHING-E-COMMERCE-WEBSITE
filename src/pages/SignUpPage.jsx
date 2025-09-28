@@ -1,17 +1,77 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
+import { useApp } from "../context/AppContext"
 
 export default function SignUpPage() {
   const navigate = useNavigate()
+  const { api } = useApp()
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
+  const [loading, setLoading] = useState(false)
 
-  const onSubmit = (e) => {
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
+  const validateForm = () => {
+    if (!firstName.trim()) {
+      setError("First name is required")
+      return false
+    }
+    if (!lastName.trim()) {
+      setError("Last name is required")
+      return false
+    }
+    if (!email.trim()) {
+      setError("Email is required")
+      return false
+    }
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address")
+      return false
+    }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long")
+      return false
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match")
+      return false
+    }
+    return true
+  }
+
+  const onSubmit = async (e) => {
     e.preventDefault()
-    // TODO: call sign up API
-    navigate("/login")
+    setError("")
+    setSuccess("")
+    
+    if (!validateForm()) {
+      return
+    }
+
+    setLoading(true)
+    
+    try {
+      await api.register(firstName, lastName, email, password)
+      
+      setSuccess("Account created successfully! Redirecting to your account...")
+      
+      // Small delay to show success message before navigation
+      setTimeout(() => {
+        navigate("/account")
+      }, 1500)
+    } catch (err) {
+      setError(err.message || "Registration failed. Please try again.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -22,6 +82,20 @@ export default function SignUpPage() {
           <h1 className="text-4xl font-semibold tracking-tight text-black mb-10">Create Account</h1>
 
           <form onSubmit={onSubmit} className="max-w-xl space-y-6">
+            {/* Success Message */}
+            {success && (
+              <div className="w-full rounded-md border border-green-400 bg-green-100 px-4 py-2 text-sm text-green-600">
+                {success}
+              </div>
+            )}
+            
+            {/* Error Message */}
+            {error && (
+              <div className="w-full rounded-md border border-red-400 bg-red-100 px-4 py-2 text-sm text-red-600">
+                {error}
+              </div>
+            )}
+
             <div className="space-y-2">
               <label className="block text-sm text-black">First Name</label>
               <input
@@ -30,7 +104,9 @@ export default function SignUpPage() {
                 onChange={(e) => setFirstName(e.target.value)}
                 placeholder="John"
                 required
-                className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-[15px] text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black/80"
+                className={`w-full rounded-xl border px-4 py-3 text-[15px] text-black placeholder-gray-400 focus:outline-none focus:ring-2 ${
+                  error ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-black/80"
+                }`}
               />
             </div>
 
@@ -42,7 +118,9 @@ export default function SignUpPage() {
                 onChange={(e) => setLastName(e.target.value)}
                 placeholder="Doe"
                 required
-                className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-[15px] text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black/80"
+                className={`w-full rounded-xl border px-4 py-3 text-[15px] text-black placeholder-gray-400 focus:outline-none focus:ring-2 ${
+                  error ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-black/80"
+                }`}
               />
             </div>
 
@@ -54,7 +132,9 @@ export default function SignUpPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 required
-                className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-[15px] text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black/80"
+                className={`w-full rounded-xl border px-4 py-3 text-[15px] text-black placeholder-gray-400 focus:outline-none focus:ring-2 ${
+                  error ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-black/80"
+                }`}
               />
             </div>
 
@@ -66,15 +146,32 @@ export default function SignUpPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 required
-                className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-[15px] text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black/80"
+                className={`w-full rounded-xl border px-4 py-3 text-[15px] text-black placeholder-gray-400 focus:outline-none focus:ring-2 ${
+                  error ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-black/80"
+                }`}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm text-black">Confirm Password</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm your password"
+                required
+                className={`w-full rounded-xl border px-4 py-3 text-[15px] text-black placeholder-gray-400 focus:outline-none focus:ring-2 ${
+                  error ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-black/80"
+                }`}
               />
             </div>
 
             <button
               type="submit"
-              className="w-[320px] max-w-full rounded-full bg-black px-6 py-3.5 text-white text-base font-medium hover:opacity-90 focus:outline-none"
+              disabled={loading}
+              className="w-[320px] max-w-full rounded-full bg-black px-6 py-3.5 text-white text-base font-medium hover:opacity-90 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Create Account
+              {loading ? "Creating Account..." : "Create Account"}
             </button>
 
             <div>
