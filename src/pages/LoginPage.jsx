@@ -1,26 +1,62 @@
 import { useState } from "react"
 import { Link, useNavigate, useLocation } from "react-router-dom"
+import { useApp } from "../context/AppContext"
 
 export default function LoginPage() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { api } = useApp()
   const from = location.state?.from?.pathname || "/"
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
+  const [loading, setLoading] = useState(false)
 
-  const onSubmit = (e) => {
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
+  const onSubmit = async (e) => {
     e.preventDefault()
+    setError("")
+    setSuccess("")
 
-    // Mock auth check (replace with real API later)
-    if (email !== "demo@example.com" || password !== "password123") {
-      setError("Incorrect email or password.")
+    // Validate email format
+    if (!email.trim()) {
+      setError("Email is required")
       return
     }
 
-    setError("")
-    navigate(from, { replace: true })
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address")
+      return
+    }
+
+    if (!password.trim()) {
+      setError("Password is required")
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      // Use the AppContext login method (now accepts any email/password)
+      await api.login(email, password)
+      
+      setSuccess("Login successful! Redirecting...")
+      
+      // Small delay to show success message before navigation
+      setTimeout(() => {
+        navigate(from, { replace: true })
+      }, 1000)
+    } catch (err) {
+      setError("Login failed. Please try again.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -31,6 +67,13 @@ export default function LoginPage() {
           <h1 className="text-4xl font-semibold tracking-tight text-black mb-10">Sign In</h1>
 
           <form onSubmit={onSubmit} className="max-w-xl space-y-6">
+            {/* Success Message */}
+            {success && (
+              <div className="w-full rounded-md border border-green-400 bg-green-100 px-4 py-2 text-sm text-green-600">
+                {success}
+              </div>
+            )}
+            
             {/* Error Message */}
             {error && (
               <div className="w-full rounded-md border border-red-400 bg-red-100 px-4 py-2 text-sm text-red-600">
@@ -74,9 +117,10 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="w-[320px] max-w-full rounded-full bg-black px-6 py-3.5 text-white text-base font-medium hover:opacity-90 focus:outline-none"
+              disabled={loading}
+              className="w-[320px] max-w-full rounded-full bg-black px-6 py-3.5 text-white text-base font-medium hover:opacity-90 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Sign In
+              {loading ? "Signing In..." : "Sign In"}
             </button>
 
             <div className="pt-2">

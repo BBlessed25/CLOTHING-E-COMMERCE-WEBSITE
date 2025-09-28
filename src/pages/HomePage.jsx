@@ -105,19 +105,28 @@ function Hero() {
             {/* CTAs */}
             <div className="mt-8 flex flex-wrap gap-3">
               {slide.cta && (
-                <button className="rounded-full bg-white px-6 py-3 text-sm font-medium text-black hover:bg-white/90">
+                <Link 
+                  to="/collections" 
+                  className="rounded-full bg-white px-6 py-3 text-sm font-medium text-black hover:bg-white/90"
+                >
                   {slide.cta}
-                </button>
+                </Link>
               )}
               {slide.ctaLeft && (
-                <button className="rounded-full bg-white px-6 py-3 text-sm font-medium text-black hover:bg-white/90">
+                <Link 
+                  to="/collections" 
+                  className="rounded-full bg-white px-6 py-3 text-sm font-medium text-black hover:bg-white/90"
+                >
                   {slide.ctaLeft}
-                </button>
+                </Link>
               )}
               {slide.ctaRight && (
-                <button className="rounded-full border border-white/70 bg-transparent px-6 py-3 text-sm font-medium text-white hover:bg-white hover:text-black">
+                <Link 
+                  to="/collections" 
+                  className="rounded-full border border-white/70 bg-transparent px-6 py-3 text-sm font-medium text-white hover:bg-white hover:text-black"
+                >
                   {slide.ctaRight}
-                </button>
+                </Link>
               )}
             </div>
           </div>
