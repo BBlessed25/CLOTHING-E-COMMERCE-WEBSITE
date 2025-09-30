@@ -1,9 +1,13 @@
-import { useCart } from '../../hooks/useCart'
+import { useApp } from '../../context/AppContext'
 import { formatPrice } from '../../utils/formatPrice'
 import Button from '../ui/Button'
 
 export default function MiniCartDrawer() {
-  const { items, subtotal, currency, toggleCart } = useCart()
+  const { state, api } = useApp()
+  const items = state.cart.items
+  const subtotal = state.cart.subtotal
+  const currency = state.cart.currency
+  const toggleCart = api.toggleCart
   return (
     <div className="fixed inset-y-0 right-0 z-50 w-80 bg-white shadow-xl border-l">
       <div className="flex items-center justify-between border-b p-4">

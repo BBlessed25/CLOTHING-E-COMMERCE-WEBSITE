@@ -1,7 +1,7 @@
 // src/components/layout/Layout.jsx
 import { Outlet, Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
-import { useCart } from '../../hooks/useCart'
+import { useApp } from '../../context/AppContext'
 import Button from '../ui/Button.jsx'
 
 export default function Layout() {
@@ -152,7 +152,10 @@ function SearchPopover() {
               <ul className="space-y-2">
                 {products.map((pr) => (
                   <li key={pr.id}>
-                    <button type="button" className="group flex w-full items-center gap-3 rounded-md p-2 transition-colors hover:bg-black/80">
+                    <Link 
+                      to={`/products/${pr.slug || pr.id}`}
+                      className="group flex w-full items-center gap-3 rounded-md p-2 transition-colors hover:bg-black/80"
+                    >
                       <div className="h-12 w-12 shrink-0 overflow-hidden rounded border bg-gray-100">
                         <img
                           src={pr.image}
@@ -171,7 +174,7 @@ function SearchPopover() {
                           <span className={badgeClass(pr.badge)}>{pr.status}</span>
                         </div>
                       </div>
-                    </button>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -354,9 +357,12 @@ function WhatsNewMenu() {
 
 /* ---------------- Header ---------------- */
 function Header() {
-  const { items } = useCart()
+  const { state } = useApp()
   const location = useLocation()
   const navigate = useNavigate()
+  const items = state.cart.items
+  
+  console.log('Header cart items:', items)
 
   return (
     <header className="border-b bg-white overflow-visible">

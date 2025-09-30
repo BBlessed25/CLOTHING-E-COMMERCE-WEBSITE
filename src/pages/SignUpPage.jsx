@@ -63,10 +63,11 @@ export default function SignUpPage() {
       
       setSuccess("Account created successfully! Redirecting to your account...")
       
-      // Small delay to show success message before navigation
+      // Longer delay to ensure state is properly saved before navigation
       setTimeout(() => {
-        navigate("/account")
-      }, 1500)
+        console.log('Navigating to account page after signup')
+        navigate("/account", { replace: true })
+      }, 2000)
     } catch (err) {
       setError(err.message || "Registration failed. Please try again.")
     } finally {

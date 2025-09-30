@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 /**
  * Sneakers listing page
@@ -12,6 +13,7 @@ export default function SneakerPage() {
     // --- Row 1
     {
       id: 1,
+      slug: "ace-gg-canvas-low-top-sneakers",
       title: "Ace GG Canvas Low-Top Sneakers",
       brand: "Gucci",
       price: "₦363,480",
@@ -19,6 +21,7 @@ export default function SneakerPage() {
     },
     {
       id: 2,
+      slug: "chloe-kick-low-top-sneakers",
       title: "Chloé Kick Low-Top Sneakers",
       brand: "Chloe",
       price: "₦1,045,200",
@@ -26,6 +29,7 @@ export default function SneakerPage() {
     },
     {
       id: 3,
+      slug: "vieira-2-sneakers",
       title: "Vieira 2 Sneakers ",
       brand: "Christian Louboutin",
       price: "₦514,800",
@@ -33,6 +37,7 @@ export default function SneakerPage() {
     },
     {
       id: 4,
+      slug: "ff-logo-low-top-sneakers",
       title: "FF Logo Low-Top Sneakers",
       brand: "Fendi",
       price: "₦873,600",
@@ -40,6 +45,7 @@ export default function SneakerPage() {
     },
     {
       id: 5,
+      slug: "urban-street-sneakers-leather-elastic",
       title: "Urban Street Sneakers in Leather with Elastic Band",
       brand: "Givenchy",
       price: "₦811,200",
@@ -49,6 +55,7 @@ export default function SneakerPage() {
     // --- Row 2
     {
       id: 6,
+      slug: "veles-knit-sneakers",
       title: "Veles Knit Sneakers",
       brand: "Jimmy Choo",
       price: "₦483,600",
@@ -56,6 +63,7 @@ export default function SneakerPage() {
     },
     {
       id: 7,
+      slug: "womens-americas-cup-biker-fabric-sneakers",
       title: "Women's America's Cup Biker Fabric Sneakers",
       brand: "Prada",
       price: "₦2,346,000",
@@ -63,6 +71,7 @@ export default function SneakerPage() {
     },
     {
       id: 8,
+      slug: "skel-top-low-leather-sneakers",
       title: "Skel Top Low Leather Sneakers",
       brand: "Amiri",
       price: "₦996,400",
@@ -70,6 +79,7 @@ export default function SneakerPage() {
     },
     {
       id: 9,
+      slug: "leather-curb-sneakers",
       title: "Leather Curb Sneakers",
       brand: "Lanvin",
       price: "₦920,400",
@@ -77,6 +87,7 @@ export default function SneakerPage() {
     },
     {
       id: 10,
+      slug: "stella-mccartney-adidas-rasant-logo-sneakers",
       title: "Stella McCartney x adidas Rasant Logo Sneakers",
       brand: "Stella McCartney",
       price: "₦358,800",
@@ -86,6 +97,7 @@ export default function SneakerPage() {
     // --- Row 3
     {
       id: 11,
+      slug: "new-regis-check-sneakers",
       title: "New Regis Check Sneakers",
       brand: "Burberry",
       price: "₦842,400",
@@ -93,13 +105,15 @@ export default function SneakerPage() {
     },
     {
       id: 12,
+      slug: "stella-mccartney-adidas-rasant-logo-sneakers-2",
       title: "Stella McCartney x adidas Rasant Logo Sneakers",
       brand: "Stella McCartney",
-      price: "1,842,400",
+      price: "₦1,842,400",
       image: "/assets/mcarty.jpg",
     },
     {
       id: 13,
+      slug: "gymnasium-technical-fabric-suede-sneakers",
       title: "Gymnasium Technical Fabric and Suede Sneakers",
       brand: "Miu Miu",
       price: "₦363,480",
@@ -107,6 +121,7 @@ export default function SneakerPage() {
     },
     {
       id: 14,
+      slug: "aeliot-logo-detailed-leather-canvas-sneakers",
       title: "AEliot Logo-Detailed Leather & Canvas Sneakers",
       brand: "Bottega Veneta",
       price: "₦983,600",
@@ -114,6 +129,7 @@ export default function SneakerPage() {
     },
     {
       id: 15,
+      slug: "comme-des-garcons-asics-gel-lyte-iii-sneakers",
       title: "Comme des Garçons Shirt X Asics Gel-Lyte III Low-Top Sneakers",
       brand: "Comme des Garçons",
       price: "₦811,200",
@@ -123,6 +139,7 @@ export default function SneakerPage() {
     // --- Row 4 (to show footer “You’re viewing 1–18 of 18” like your shot)
     {
       id: 16,
+      slug: "the-72-spring-sneakers",
       title: "The 72 Spring Sneakers",
       brand: "Marc Jacobs",
       price: "₦676,400",
@@ -130,6 +147,7 @@ export default function SneakerPage() {
     },
     {
       id: 17,
+      slug: "leather-shearling-low-top-sneakers",
       title: "Leather & Shearling Low-Top Sneakers",
       brand: "McQueen",
       price: "₦883,600",
@@ -137,6 +155,7 @@ export default function SneakerPage() {
     },
     {
       id: 18,
+      slug: "vlogo-easyjog-calfskin-fabric-sneakers",
       title: "VLogo Easyjog Calfskin and Fabric Sneakers",
       brand: "Valentino Garavani",
       price: "₦1,194,640",
@@ -176,9 +195,10 @@ export default function SneakerPage() {
       {/* Grid */}
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {products.map((p) => (
-          <article
+          <Link
             key={p.id}
-            className="rounded-2xl bg-white shadow-sm ring-1 ring-gray-100 overflow-hidden"
+            to={`/products/${p.slug || p.id}`}
+            className="block rounded-2xl bg-white shadow-sm ring-1 ring-gray-100 overflow-hidden hover:shadow-md transition-shadow"
           >
             {/* Image pane (tall, very light gray background like screenshots) */}
             <div className="bg-gray-100">
@@ -201,7 +221,7 @@ export default function SneakerPage() {
               <div className="mt-1 text-sm text-gray-500">{p.brand}</div>
               <div className="mt-1 font-medium">{p.price}</div>
             </div>
-          </article>
+          </Link>
         ))}
       </div>
 

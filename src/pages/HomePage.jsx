@@ -13,18 +13,29 @@ const Section = ({ title, children, right }) => (
   </section>
 );
 
-const Card = ({ image, title, subtitle, price }) => (
-  <div className="group rounded-2xl bg-white ring-1 ring-black/5 shadow-sm overflow-hidden">
+const Card = ({ image, title, subtitle, price, slug, id }) => (
+  <Link
+    to={`/products/${slug || id}`}
+    className="group rounded-2xl bg-white ring-1 ring-black/5 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+  >
     <div className="aspect-[4/3] w-full bg-gray-50">
       {/* eslint-disable-next-line jsx-a11y/alt-text */}
-      <img src={image} className="h-full w-full object-contain" />
+      <img 
+        src={image} 
+        alt={title}
+        className="h-full w-full object-contain"
+        onError={(e) => {
+          e.currentTarget.src = ''
+          e.currentTarget.style.background = '#eee'
+        }}
+      />
     </div>
     <div className="p-4">
       <div className="text-sm text-gray-500">{subtitle}</div>
       <div className="mt-1 text-[15px] font-medium">{title}</div>
       {price && <div className="mt-1 text-[15px]">₦{price.toLocaleString()}</div>}
     </div>
-  </div>
+  </Link>
 );
 
 /** --- HERO / CAROUSEL --- */
@@ -192,31 +203,31 @@ const img = (n) => `/assets/p${n}.png`;
 
 const demoRows = {
   brands_finch: [
-    { image: "/assets/finch meshed.jpg", title: "finch meshed knit shirt", subtitle: "Finch", price: 296400 },
-    { image: "/assets/finch metallic.jpg", title: "finch Ski Quilted Puffer Jacket In Metallic Polyester ", subtitle: "Finch", price: 296400 },
-    { image: "/assets/finch varsity jacket.jpg", title: "finch Varsity Jacket", subtitle: "Finch", price: 280800 },
-    { image: "/assets/finch denim jacket.jpeg", title: "Finch Monogram Denim", subtitle: "finch", price: 343200 },
-    { image: "/assets/finch denim jeans.jpg", title: "Finch Monogram Denim", subtitle: "Finch", price: 312000 },
+    { id: 'home-1', slug: 'finch-meshed-knit-shirt', image: "/assets/finch meshed.jpg", title: "finch meshed knit shirt", subtitle: "Finch", price: 296400 },
+    { id: 'home-2', slug: 'finch-ski-quilted-puffer-jacket', image: "/assets/finch metallic.jpg", title: "finch Ski Quilted Puffer Jacket In Metallic Polyester ", subtitle: "Finch", price: 296400 },
+    { id: 'home-3', slug: 'finch-varsity-jacket', image: "/assets/finch varsity jacket.jpg", title: "finch Varsity Jacket", subtitle: "Finch", price: 280800 },
+    { id: 'home-4', slug: 'finch-monogram-denim-jacket', image: "/assets/finch denim jacket.jpeg", title: "Finch Monogram Denim", subtitle: "finch", price: 343200 },
+    { id: 'home-5', slug: 'finch-monogram-denim-jeans', image: "/assets/finch denim jeans.jpg", title: "Finch Monogram Denim", subtitle: "Finch", price: 312000 },
   ],
   trending_sunglasses: [
-    { image: "/assets/Cartier eyewear .jpg", title: "Cartier Elysian Sunglass", subtitle: "Cartier", price: 210600 },
-    { image: "/assets/Gucci eyewear.jpg", title: "GUCCI GG1855O 002", subtitle: "Gucci", price: 259200 },
-    { image: "/assets/Dior eyewear.jpg", title: "DiorSignatureO B2I", subtitle: "Dior", price: 267300 },
-    { image: "/assets/Channel eyewear.jpg", title: "CH5546Q 17338H", subtitle: "Channel", price: 243000 },
-    { image: "/assets/Celine eyewear.jpg", title: "CELINE 3 Dots", subtitle: "Celine", price: 259200 },
+    { id: 'home-6', slug: 'cartier-elysian-sunglass', image: "/assets/Cartier eyewear .jpg", title: "Cartier Elysian Sunglass", subtitle: "Cartier", price: 210600 },
+    { id: 'home-7', slug: 'gucci-gg1855o-002', image: "/assets/Gucci eyewear.jpg", title: "GUCCI GG1855O 002", subtitle: "Gucci", price: 259200 },
+    { id: 'home-8', slug: 'dior-signatureo-b2i', image: "/assets/Dior eyewear.jpg", title: "DiorSignatureO B2I", subtitle: "Dior", price: 267300 },
+    { id: 'home-9', slug: 'channel-ch5546q-17338h', image: "/assets/Channel eyewear.jpg", title: "CH5546Q 17338H", subtitle: "Channel", price: 243000 },
+    { id: 'home-10', slug: 'celine-3-dots', image: "/assets/Celine eyewear.jpg", title: "CELINE 3 Dots", subtitle: "Celine", price: 259200 },
   ],
   best_sellers_shirts: [
-    { image: "/assets/LV-polo.jpg", title: "Embroidered Short-Sleeved Cotton Blend Polo Shirt", subtitle: "Louis Vuitton", price: 390000 },
-    { image: "/assets/Burberry Shirt.jpg", title: "Burberry-Slim-Fit-Monogram-Motif-Stretch-Cotton-Poplin-Shirt-Deep-Maroon", subtitle: "Burberry", price: 343200 },
-    { image: "/assets/Amiri shirt.png", title: "Amiri Hollywood Bowling Shirt", subtitle: "Amiri", price: 530400 },
-    { image: "/assets/MCM shirt.jpg", title: "MCM X KASINA Bandana Monogram Zip Hoodie In Oxford Cotton", subtitle: "MCM", price: 499200 },
+    { id: 'home-11', slug: 'louis-vuitton-embroidered-polo', image: "/assets/LV-polo.jpg", title: "Embroidered Short-Sleeved Cotton Blend Polo Shirt", subtitle: "Louis Vuitton", price: 390000 },
+    { id: 'home-12', slug: 'burberry-slim-fit-monogram-shirt', image: "/assets/Burberry Shirt.jpg", title: "Burberry-Slim-Fit-Monogram-Motif-Stretch-Cotton-Poplin-Shirt-Deep-Maroon", subtitle: "Burberry", price: 343200 },
+    { id: 'home-13', slug: 'amiri-hollywood-bowling-shirt', image: "/assets/Amiri shirt.png", title: "Amiri Hollywood Bowling Shirt", subtitle: "Amiri", price: 530400 },
+    { id: 'home-14', slug: 'mcm-kasina-bandana-hoodie', image: "/assets/MCM shirt.jpg", title: "MCM X KASINA Bandana Monogram Zip Hoodie In Oxford Cotton", subtitle: "MCM", price: 499200 },
   ],
      MCM_Collections: [
-     { image: "/assets/MCM shorts.jpg", title: "Monogram Shorts In Denim Jacquard", subtitle: "MCM", price: 124800 },
-     { image: "/assets/MCM shorts1.jpg", title: "Essential Logo Ponte Shorts", subtitle: "MCM", price: 46800 },
-     { image: "/assets/MCM skirt.jpg", title: "Skirt-Layered Shorts In ECONYL® And Monogram Print Leather", subtitle: "MCM", price: 117000 },
-         { image: "/assets/MCM jacket1.jpg", title: "Reversible Vest In Lamb Leather And Monogram Nylon", subtitle: "MCM", price: 124800 },
-     { image: "/assets/MCM rider.jpg", title: "Cropped Rider Jacket In Lamb Leather", subtitle: "MCM", price: 124800 },
+     { id: 'home-15', slug: 'mcm-monogram-shorts-denim', image: "/assets/MCM shorts.jpg", title: "Monogram Shorts In Denim Jacquard", subtitle: "MCM", price: 124800 },
+     { id: 'home-16', slug: 'mcm-essential-logo-shorts', image: "/assets/MCM shorts1.jpg", title: "Essential Logo Ponte Shorts", subtitle: "MCM", price: 46800 },
+     { id: 'home-17', slug: 'mcm-skirt-layered-shorts', image: "/assets/MCM skirt.jpg", title: "Skirt-Layered Shorts In ECONYL® And Monogram Print Leather", subtitle: "MCM", price: 117000 },
+         { id: 'home-18', slug: 'mcm-reversible-vest', image: "/assets/MCM jacket1.jpg", title: "Reversible Vest In Lamb Leather And Monogram Nylon", subtitle: "MCM", price: 124800 },
+     { id: 'home-19', slug: 'mcm-cropped-rider-jacket', image: "/assets/MCM rider.jpg", title: "Cropped Rider Jacket In Lamb Leather", subtitle: "MCM", price: 124800 },
   ],
 };
 
