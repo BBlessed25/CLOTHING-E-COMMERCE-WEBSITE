@@ -2,34 +2,13 @@ import { createContext, useContext, useMemo, useReducer, useEffect } from 'react
 
 const AppContext = createContext(null)
 
-// Load initial state from localStorage
-const loadInitialState = () => {
-  try {
-    const savedAuth = localStorage.getItem('finch_auth')
-    const savedUsers = localStorage.getItem('finch_users')
-    
-    if (savedAuth) {
-      const authData = JSON.parse(savedAuth)
-      return {
-        auth: { ...authData, status: 'auth' },
-        cart: { items: [], subtotal: 0, currency: 'NGN', status: 'idle' },
-        ui: { drawer: { cart: false, quickBuy: false }, toasts: [] },
-        users: savedUsers ? JSON.parse(savedUsers) : []
-      }
-    }
-  } catch (error) {
-    console.error('Error loading saved auth state:', error)
-  }
-  
-  return {
-    auth: { user: null, token: null, status: 'idle' },
-    cart: { items: [], subtotal: 0, currency: 'NGN', status: 'idle' },
-    ui: { drawer: { cart: false, quickBuy: false }, toasts: [] },
-    users: [] // Store registered users
-  }
+// Default initial state
+const defaultInitialState = {
+  auth: { user: null, token: null, status: 'idle' },
+  cart: { items: [], subtotal: 0, currency: 'NGN', status: 'idle' },
+  ui: { drawer: { cart: false, quickBuy: false }, toasts: [] },
+  users: [] // Store registered users
 }
-
-const initial = loadInitialState()
 
 function reducer(state, action) {
   switch (action.type) {
@@ -43,8 +22,15 @@ function reducer(state, action) {
         users: [...state.users, action.user],
         auth: { ...state.auth, user: action.user, token: action.token, status: 'auth' }
       }
+    case 'RESTORE_USERS':
+      return { ...state, users: action.users }
     case 'ADD_TO_CART': {
       const items = [...state.cart.items, action.item]
+      const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0)
+      return { ...state, cart: { ...state.cart, items, subtotal } }
+    }
+    case 'REMOVE_FROM_CART': {
+      const items = state.cart.items.filter(item => item.id !== action.itemId)
       const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0)
       return { ...state, cart: { ...state.cart, items, subtotal } }
     }
@@ -56,18 +42,46 @@ function reducer(state, action) {
 }
 
 export function AppProvider({ children }) {
-  const [state, dispatch] = useReducer(reducer, initial)
+  const [state, dispatch] = useReducer(reducer, defaultInitialState)
+
+  // Handle initial state loading on mount
+  useEffect(() => {
+    const savedAuth = localStorage.getItem('finch_auth')
+    const savedUsers = localStorage.getItem('finch_users')
+    
+    if (savedAuth) {
+      try {
+        const authData = JSON.parse(savedAuth)
+        console.log('Restoring auth state on mount:', authData)
+        dispatch({ type: 'LOGIN_SUCCESS', user: authData.user, token: authData.token })
+      } catch (error) {
+        console.error('Error restoring auth state:', error)
+      }
+    }
+    
+    if (savedUsers) {
+      try {
+        const users = JSON.parse(savedUsers)
+        console.log('Restoring users on mount:', users)
+        // Dispatch action to restore users
+        dispatch({ type: 'RESTORE_USERS', users })
+      } catch (error) {
+        console.error('Error restoring users:', error)
+      }
+    }
+  }, [])
 
   // Save auth state to localStorage whenever it changes
   useEffect(() => {
     if (state.auth.status === 'auth' && state.auth.user) {
-      localStorage.setItem('finch_auth', JSON.stringify({
+      const authData = {
         user: state.auth.user,
         token: state.auth.token
-      }))
-    } else if (state.auth.status === 'idle') {
-      localStorage.removeItem('finch_auth')
+      }
+      localStorage.setItem('finch_auth', JSON.stringify(authData))
+      console.log('Auth state saved to localStorage:', authData)
     }
+    // Only remove from localStorage on explicit logout, not on idle status
   }, [state.auth])
 
   // Save users to localStorage whenever it changes
@@ -124,6 +138,7 @@ export function AppProvider({ children }) {
       
       // Remove password from user object before storing in auth
       const { password: _, ...userData } = newUser
+      console.log('Registering user:', userData)
       dispatch({ type: 'REGISTER_SUCCESS', user: userData, token: 'demo-token' })
     },
     logout: () => {
@@ -131,6 +146,7 @@ export function AppProvider({ children }) {
       dispatch({ type: 'LOGOUT' })
     },
     addToCart: (item) => dispatch({ type: 'ADD_TO_CART', item }),
+    removeFromCart: (itemId) => dispatch({ type: 'REMOVE_FROM_CART', itemId }),
     toggleCart: () => dispatch({ type: 'TOGGLE_CART' }),
   }
 
